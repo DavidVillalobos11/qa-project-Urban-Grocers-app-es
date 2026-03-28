@@ -1,5 +1,5 @@
 from sender_stand_request import post_new_user, post_new_client_kit
-
+import data
 
 def get_auth_token():
     response = post_new_user()
@@ -14,7 +14,7 @@ def test_kit_name_1_char():
     response = post_new_client_kit(kit_body, token)
 
     assert response.status_code == 201
-    assert response.json()["name"] == "a"
+    assert response.json()["name"] == kit_body["name"]
 
 
 # 2
@@ -25,6 +25,7 @@ def test_kit_name_511_chars():
     response = post_new_client_kit(kit_body, token)
 
     assert response.status_code == 201
+    assert response.json()["name"] == kit_body["name"]
 
 
 # 3
@@ -55,6 +56,7 @@ def test_kit_special_chars():
     response = post_new_client_kit(kit_body, token)
 
     assert response.status_code == 201
+    assert response.json()["name"] == kit_body["name"]
 
 
 # 6
@@ -65,6 +67,7 @@ def test_kit_spaces():
     response = post_new_client_kit(kit_body, token)
 
     assert response.status_code == 201
+    assert response.json()["name"] == kit_body["name"]
 
 
 # 7
@@ -75,12 +78,14 @@ def test_kit_numbers():
     response = post_new_client_kit(kit_body, token)
 
     assert response.status_code == 201
+    assert response.json()["name"] == kit_body["name"]
 
 
 # 8
 def test_kit_no_name():
     token = get_auth_token()
-    kit_body = {}
+    kit_body = data.kit_body.copy()
+    kit_body.pop("name")
 
     response = post_new_client_kit(kit_body, token)
 
